@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dallyworld 2 - Minecraft Сервер</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: #0c162d;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(22, 45, 78, 0.8) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(33, 65, 112, 0.6) 0%, transparent 30%),
+                linear-gradient(to bottom, #0c162d, #020a18);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        header {
+            text-align: center;
+            padding: 60px 20px 40px;
+            position: relative;
+        }
+        
+        .logo {
+            font-size: 5rem;
+            margin-bottom: 15px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            background: linear-gradient(45deg, #ff7b00, #ffaa00, #ffd000);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255, 123, 0, 0.3);
+            position: relative;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+        
+        .logo::after {
+            content: "2";
+            position: absolute;
+            top: -15px;
+            right: -25px;
+            font-size: 2rem;
+            color: #ffd000;
+            text-shadow: 0 0 10px rgba(255, 208, 0, 0.5);
+        }
+        
+        .subtitle {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: #a3d5ff;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+            text-shadow: 0 0 10px rgba(0, 100, 255, 0.2);
+        }
+        
+        .server-info {
+            background: rgba(10, 20, 40, 0.7);
+            border: 3px solid #ff7b00;
+            border-radius: 15px;
+            padding: 25px 40px;
+            display: inline-block;
+            margin: 30px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(255, 123, 0, 0.3);
+            backdrop-filter: blur(5px);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 15px rgba(255, 123, 0, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(255, 123, 0, 0.6); }
+            100% { box-shadow: 0 0 15px rgba(255, 123, 0, 0.3); }
+        }
+        
+        .server-ip {
+            font-size: 2.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #ffd000;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 0 10px rgba(255, 208, 0, 0.3);
+            font-family: 'Courier New', monospace;
+        }
+        
+        .server-status {
+            font-size: 1.3rem;
+            margin-top: 15px;
+            color: #4caf50;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .server-status i {
+            animation: pulse 1.5s infinite;
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 50px 0;
+        }
+        
+        .btn {
+            padding: 20px 45px;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            transform: translateY(0);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            min-width: 300px;
+            justify-content: center;
+        }
+        
+        .btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+            z-index: -1;
+        }
+        
+        .btn:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
+        }
+        
+        .btn:hover::before {
+            transform: translateX(100%);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-copy {
+            background: linear-gradient(45deg, #ff7b00, #ffaa00);
+            color: #fff;
+        }
+        
+        .btn-telegram {
+            background: linear-gradient(45deg, #0088cc, #00b7eb);
+            color: #fff;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 35px;
+            margin: 80px 0;
+        }
+        
+        .feature-card {
+            background: rgba(15, 30, 55, 0.7);
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            transition: all 0.4s ease;
+            border: 2px solid rgba(255, 123, 0, 0.3);
+            backdrop-filter: blur(5px);
+            position: relative;
+            overflow: hidden;
+            transform: perspective(800px) rotateY(0deg);
+            transform-style: preserve-3d;
+        }
+        
+        .feature-card:hover {
+            transform: perspective(800px) rotateY(5deg) translateY(-15px);
+            border: 2px solid rgba(255, 123, 0, 0.7);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+        
+        .feature-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 123, 0, 0.1), transparent);
+            z-index: -1;
+        }
+        
+        .feature-icon {
+            font-size: 4rem;
+            margin-bottom: 25px;
+            color: #ffaa00;
+            text-shadow: 0 0 15px rgba(255, 170, 0, 0.4);
+        }
+        
+        .feature-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #ffaa00;
+            text-shadow: 0 0 10px rgba(255, 170, 0, 0.3);
+        }
+        
+        .feature-desc {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: #cce6ff;
+        }
+        
+        .minecraft-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 123, 0, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 123, 0, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: -1;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, #ff7b00, #ffaa00);
+            color: white;
+            padding: 18px 35px;
+            border-radius: 12px;
+            font-size: 1.3rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+            box-shadow: 0 8px 25px rgba(255, 123, 0, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 600;
+        }
+        
+        .notification.show {
+            opacity: 1;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 30px;
+            margin-top: 60px;
+            background: rgba(8, 18, 36, 0.8);
+            border-top: 2px solid rgba(255, 123, 0, 0.3);
+            font-size: 1.1rem;
+            color: #a3d5ff;
+            position: relative;
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 25px 0;
+        }
+        
+        .social-icon {
+            font-size: 2rem;
+            color: #ffaa00;
+            transition: all 0.3s ease;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 170, 0, 0.1);
+        }
+        
+        .social-icon:hover {
+            color: #ffd000;
+            transform: translateY(-5px) rotate(5deg);
+            background: rgba(255, 170, 0, 0.2);
+            box-shadow: 0 0 20px rgba(255, 170, 0, 0.3);
+        }
+        
+        .copyright {
+            margin-top: 25px;
+            font-size: 1.1rem;
+            color: #88b4e6;
+        }
+        
+        .block-animation {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 123, 0, 0.2);
+            border: 1px solid rgba(255, 170, 0, 0.3);
+            pointer-events: none;
+            animation: floatBlock 15s infinite linear;
+            z-index: 1;
+        }
+        
+        @keyframes floatBlock {
+            0% { transform: translateY(0) translateX(0) rotate(0deg); }
+            25% { transform: translateY(-50px) translateX(50px) rotate(90deg); }
+            50% { transform: translateY(0) translateX(100px) rotate(180deg); }
+            75% { transform: translateY(50px) translateX(50px) rotate(270deg); }
+            100% { transform: translateY(0) translateX(0) rotate(360deg); }
+        }
+        
+        @media (max-width: 900px) {
+            .logo {
+                font-size: 3.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.5rem;
+            }
+            
+            .server-ip {
+                font-size: 1.8rem;
+            }
+            
+            .server-info {
+                padding: 20px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 350px;
+                font-size: 1.3rem;
+                padding: 18px;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 2.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1.3rem;
+            }
+            
+            .server-ip {
+                font-size: 1.5rem;
+            }
+            
+            .feature-card {
+                padding: 25px 20px;
+            }
+            
+            .feature-title {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Анимированные блоки на заднем плане -->
+    <div class="block-animation" style="top: 10%; left: 5%; animation-delay: 0s;"></div>
+    <div class="block-animation" style="top: 20%; left: 90%; animation-delay: -3s;"></div>
+    <div class="block-animation" style="top: 70%; left: 15%; animation-delay: -6s;"></div>
+    <div class="block-animation" style="top: 85%; left: 85%; animation-delay: -9s;"></div>
+    <div class="block-animation" style="top: 40%; left: 70%; animation-delay: -12s;"></div>
+    
+    <div class="minecraft-grid"></div>
+    
+    <div class="container">
+        <header>
+            <h1 class="logo">DALLYWORLD</h1>
+            <p class="subtitle">Самый эпический Minecraft сервер с уникальными мирами, захватывающими приключениями и дружным сообществом!</p>
+            
+            <div class="server-info">
+                <div class="server-ip" id="server-ip">
+                    94.198.51.12:12636
+                </div>
+                <div class="server-status">
+                    <i class="fas fa-circle"></i> Заходи!
+                </div>
+            </div>
+        </header>
+        
+        <div class="buttons">
+            <button class="btn btn-copy" id="copy-btn">
+                <i class="fas fa-copy"></i> К серверу (IP в буфер)
+            </button>
+            <button class="btn btn-telegram" id="telegram-btn">
+                <i class="fab fa-telegram"></i> Пишите нам в Telegram
+            </button>
+        </div>
+        
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-globe-americas"></i>
+                </div>
+                <h3 class="feature-title">Уникальные Миры</h3>
+                <p class="feature-desc">Исследуй 7 уникальных миров с эксклюзивными биомами, подземельями и редкими ресурсами. Каждый мир - новая захватывающая история!</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3 class="feature-title">Защита от Читеров</h3>
+                <p class="feature-desc">Мощная античит система обеспечивает честную игру. Нарушители блокируются мгновенно без возможности обхода бана.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="feature-title">Дружелюбное Комьюнити</h3>
+                <p class="feature-desc">Присоединяйся к нашему активному сообществу игроков. У нас всегда найдется место для новых друзей и совместных приключений!</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i> IP-адрес скопирован в буфер обмена!
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="#" class="social-icon"><i class="fab fa-discord"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-vk"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
+            </div>
+            <p class="copyright">© 2023 Dallyworld 2 Minecraft Server. Все права защищены.<br>Этот сервер не аффилирован с Mojang Studios или Microsoft.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const copyBtn = document.getElementById('copy-btn');
+            const telegramBtn = document.getElementById('telegram-btn');
+            const notification = document.getElementById('notification');
+            const serverIp = '94.198.51.12:12636';
+            
+            // Copy IP to clipboard
+            copyBtn.addEventListener('click', function() {
+                navigator.clipboard.writeText(serverIp).then(() => {
+                    // Show notification
+                    notification.classList.add('show');
+                    
+                    // Hide notification after 3 seconds
+                    setTimeout(() => {
+                        notification.classList.remove('show');
+                    }, 3000);
+                }).catch(err => {
+                    console.error('Ошибка копирования: ', err);
+                    alert('Не удалось скопировать IP. Скопируйте вручную: ' + serverIp);
+                });
+            });
+            
+            // Telegram button action
+            telegramBtn.addEventListener('click', function() {
+                // Замените эту ссылку на вашу реальную ссылку Telegram
+                const telegramLink = 'https://t.me/limonchik3127';
+                window.open(telegramLink, '_blank');
+            });
+            
+            // Создаем дополнительные анимированные блоки
+            for (let i = 0; i < 10; i++) {
+                const block = document.createElement('div');
+                block.classList.add('block-animation');
+                block.style.top = Math.random() * 100 + '%';
+                block.style.left = Math.random() * 100 + '%';
+                block.style.animationDelay = '-' + (Math.random() * 15) + 's';
+                block.style.width = (20 + Math.random() * 40) + 'px';
+                block.style.height = (20 + Math.random() * 40) + 'px';
+                document.body.appendChild(block);
+            }
+        });
+    </script>
+</body>
+</html>
